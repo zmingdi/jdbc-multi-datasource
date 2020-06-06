@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: "Automatic Contact Tracing"
+  datasource:
+    tomcat:
+      initial-size: 15
+      max-wait: 20000
+      max-active: 50
+      max-idle: 10
+      min-idle: 5
+      default-auto-commit: true
+    type: org.apache.tomcat.jdbc.pool.DataSource
+    username: "act_user"
+    url: jdbc:sqlserver://localhost:1433;databaseName=ACT_MASTER
+    jdbcUrl: jdbc:sqlserver://localhost:1433;databaseName=ACT_MASTER
+    password: "Password1"
+    test-on-borrow: true
+    validation-query: SELECT 1
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
