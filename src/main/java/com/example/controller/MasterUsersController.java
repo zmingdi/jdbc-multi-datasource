@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author mzhang457
  */
-@RestController
-@RequestMapping("/masterUser")
+//@RestController
+//@RequestMapping("/masterUser")
 public class MasterUsersController {
   
   @Autowired

@@ -9,6 +9,7 @@ import com.example.service.OfficeService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +27,10 @@ public class OfficeController {
   @GetMapping("/")
   public List<String> listOfficeNames() throws Exception {
     return service.listOfficeNames("clientTemplate");
+  }
+  
+  @PostMapping("/")
+  public Integer insertOffice() throws Exception {
+    return service.insertOffice("clientTemplate");
   }
 }

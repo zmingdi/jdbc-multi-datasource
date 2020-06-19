@@ -6,21 +6,27 @@
 package com.example.datasource;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 /**
  *
  * @author mzhang457
  */
+//@EnableTransactionManagement
 @Service
 public class DataSourceManager {
   
   private static final String DB_CONNECTION_URL_TEMPLATE="jdbc:sqlserver://[hostname]:1433;databaseName=[db_name]";
-//  @Autowired
-//  ApplicationContext ctx;
+
   @Autowired
   ConfigurableBeanFactory beanFactory;
   
@@ -41,22 +47,62 @@ public class DataSourceManager {
     return ds;
   }
   
+  
   @PostConstruct
   public void initTemplates() {
     DataSource clientDs = this.initDataSource("localhost", "ACT_CLIENT_PWC");
+    DataSourceTransactionManager dstmc = new DataSourceTransactionManager(clientDs);
     JdbcTemplate clientTemplate = new JdbcTemplate(clientDs);
+    TransactionTemplate clientTxTemplate = new TransactionTemplate(dstmc);
+    clientTxTemplate.setIsolationLevel(TransactionTemplate.ISOLATION_READ_UNCOMMITTED);
+    beanFactory.registerSingleton("clientDataSource", clientDs);
     beanFactory.registerSingleton("clientTemplate", clientTemplate);
-    
+    beanFactory.registerSingleton("clientTemplateTxM", dstmc);
+    beanFactory.registerSingleton("clientTxTemplate", clientTxTemplate);
+
     DataSource masterDs = this.initDataSource("localhost", "ACT_Master");
     JdbcTemplate masterTemplate = new JdbcTemplate(masterDs);
+    DataSourceTransactionManager dstmm = new DataSourceTransactionManager(clientDs);
+    TransactionTemplate masterTxTemplate = new TransactionTemplate(dstmm);
+    masterTxTemplate.setIsolationLevel(TransactionTemplate.ISOLATION_READ_UNCOMMITTED);
+    beanFactory.registerSingleton("masterDataSource", masterDs);
     beanFactory.registerSingleton("masterTemplate", masterTemplate);
+    beanFactory.registerSingleton("masterTemplateTxM", dstmm);
+    beanFactory.registerSingleton("masterTxTemplate", masterTxTemplate);
   }
   
   public JdbcTemplate getTemplate(String templateName) throws Exception {
-    if(beanFactory.containsBean(templateName)){
-      return (JdbcTemplate)beanFactory.getBean(templateName);
+    if(beanFactory.containsBean(templateName+"Template")){
+      return (JdbcTemplate)beanFactory.getBean(templateName+"Template");
     } else {
       throw new Exception("invalid templateName");
     }
+  }
+  public DataSource getDataSource(String dsName) throws Exception{
+    if(beanFactory.containsBean(dsName+"DataSource")){
+      return (DataSource)beanFactory.getBean(dsName+"DataSource");
+    } else {
+      throw new Exception("invalid dsName");
+    }
+  }
+  public JdbcTemplate getTemplate() throws Exception {
+    ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    String templateName = (String)request.getAttribute("templateName");
+    return getTemplate(templateName);
+  }
+  
+  public TransactionTemplate getTxTemplate() throws Exception {
+	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = attributes.getRequest();
+    String templateName = (String)request.getAttribute("templateName");
+    return getTxTemplate(templateName);
+  }
+  public TransactionTemplate getTxTemplate(String clientName) throws Exception {
+	if (beanFactory.containsBean(clientName+"TxTemplate")) {
+		return (TransactionTemplate) beanFactory.getBean(clientName+"TxTemplate");
+	} else {
+		throw new Exception("invalid dsName");
+	}
   }
 }

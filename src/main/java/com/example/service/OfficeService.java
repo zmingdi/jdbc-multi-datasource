@@ -6,12 +6,11 @@
 package com.example.service;
 
 import com.example.datasource.DataSourceManager;
+import com.example.monitor.TestTransactional;
 import com.google.common.collect.Lists;
 import java.util.List;
-import org.springframework.beans.factory.BeanFactory;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +31,20 @@ public class OfficeService {
       officeNames.add(rse.getString(1));
     });
     return officeNames;
+  }
+  
+  private static final String SQL_INSERT_OFFICE = "insert into Office "
+       +" (officename, OfficeStreetAddress,OfficeLat,officelon, CompanyID) "
+        +" values "
+        +" (?,?, ?, ?,1) ";
+  
+  @TestTransactional
+  public Integer insertOffice(String templateName) throws Exception {
+    
+    JdbcTemplate clientTemplate = dsMgt.getTemplate();
+    Integer k = clientTemplate.update(SQL_INSERT_OFFICE
+			, UUID.randomUUID().toString()
+            ,UUID.randomUUID().toString(),"1.11","1.11");
+	return k;
   }
 }

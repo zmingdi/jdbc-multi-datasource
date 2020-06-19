@@ -5,14 +5,16 @@
  */
 package com.example.service;
 
+import com.example.model.UserClient;
 import com.example.datasource.DataSourceManager;
 import com.google.common.collect.Lists;
 import java.util.List;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  *
@@ -25,9 +27,16 @@ public class MasterUserService {
   @Autowired
   DataSourceManager dsMgt;
   
+  public Integer addUserOffice(UserClient user) {
+    //TODO 
+    return 0;
+  }
+  @Transactional
   public List<String> listUserEmail(String templateName) throws Exception {
     JdbcTemplate template = dsMgt.getTemplate(templateName);
+    
     List<String> emails = Lists.newArrayList();
+    
     template.query("select useremail from [user]", rse->{
       emails.add(rse.getString(1));
     });
