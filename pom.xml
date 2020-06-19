@@ -8,8 +8,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>basic</name>
-    <description>Basic project for Spring Boot</description>
+    <name>Jdbc-multi-datasource</name>
+    <description>Create multi-data-source support by JDBC Template</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

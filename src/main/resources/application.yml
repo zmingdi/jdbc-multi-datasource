@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "Automatic Contact Tracing"
+    name: "Jdbc-multi-datasource"
   datasource:
     tomcat:
       initial-size: 15
