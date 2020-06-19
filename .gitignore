@@ -1,3 +1,6 @@
 target
 nbactions.xml
 nbactions-release-profile.xml
+.classpath
+.metadata
+.settings
