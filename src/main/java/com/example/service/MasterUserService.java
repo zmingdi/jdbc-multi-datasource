@@ -31,15 +31,8 @@ public class MasterUserService {
     //TODO 
     return 0;
   }
-  @Transactional
   public List<String> listUserEmail(String templateName) throws Exception {
-    JdbcTemplate template = dsMgt.getTemplate(templateName);
     
-    List<String> emails = Lists.newArrayList();
-    
-    template.query("select useremail from [user]", rse->{
-      emails.add(rse.getString(1));
-    });
-    return emails;
+    return null;
   }
 }

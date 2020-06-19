@@ -37,7 +37,7 @@ public class SwaggerConfig {
     // To set the header seperately, use following commented codes.
     List<Parameter> pars = Lists.newArrayList();
     ParameterBuilder tokenPar = new ParameterBuilder();
-    tokenPar.name("templateName").description("templateName").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+    tokenPar.name("clientName").description("clientName").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
     pars.add(tokenPar.build());
     return new Docket(DocumentationType.SWAGGER_2).ignoredParameterTypes(HttpSession.class)
             .pathProvider(new BasePathProvider("/"))

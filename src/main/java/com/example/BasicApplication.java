@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
-@EnableAutoConfiguration (exclude = {DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration 
 public class BasicApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BasicApplication.class, args);

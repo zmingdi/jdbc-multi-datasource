@@ -27,15 +27,15 @@ public class OfficeController {
   
   @GetMapping("/")
   public List<String> listOfficeNames() throws Exception {
-    return service.listOfficeNames("clientTemplate");
+    return service.listOfficeNames();
   }
   
-  @PostMapping("/insertOffice1")
-  public Integer insertOffice1(@RequestHeader String templateName) throws Exception {
-    return service.insertOffice(templateName);
+  @PostMapping("/insertOfficeWithTemplate")
+  public Integer insertOfficeWithTemplate(@RequestHeader String clientName) throws Exception {
+    return service.insertOffice(clientName);
   }
-  @PostMapping("/insertOffice2")
-  public Boolean insertOffice2(@RequestHeader String templateName) throws Exception {
-    return service.insertOfficeWithoutJdbcTemplate(templateName);
+  @PostMapping("/insertOfficeWithJdbcConn")
+  public Boolean insertOfficeWithJdbcConn(@RequestHeader String clientName) throws Exception {
+    return service.insertOfficeWithoutJdbcTemplate(clientName);
   }
 }

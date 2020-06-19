@@ -29,8 +29,8 @@ public class OfficeService {
 	@Autowired
 	DataSourceManager dsMgt;
 
-	public List<String> listOfficeNames(String templateName) throws Exception {
-		JdbcTemplate clientTemplate = dsMgt.getTemplate(templateName);
+	public List<String> listOfficeNames() throws Exception {
+		JdbcTemplate clientTemplate = dsMgt.getTemplate();
 		List<String> officeNames = Lists.newArrayList();
 		clientTemplate.query("select officeName from [office]", rse -> {
 			officeNames.add(rse.getString(1));
@@ -39,7 +39,7 @@ public class OfficeService {
 	}
 
 	private static final String SQL_INSERT_OFFICE = "insert into Office "
-			+ " (officename, OfficeStreetAddress,OfficeLat,officelon, CompanyID) " + " values " + " (?,?, ?, ?,1) ";
+			+ " (officename, OfficeStreetAddress,OfficeLat,officelon) " + " values " + " (?,?, ?, ?) ";
 
 	/**
 	 * Using combination of JdbcTemplate, and aspect by transaction template defined
@@ -64,7 +64,7 @@ public class OfficeService {
 	 */
 	@TestTransactional
 	public Boolean insertOfficeWithoutJdbcTemplate(String templateName) throws Exception {
-		DataSource ds = dsMgt.getDataSource(templateName);
+		DataSource ds = dsMgt.getDataSource();
 		Connection conn = ds.getConnection();
 		try (PreparedStatement prep = conn.prepareStatement(SQL_INSERT_OFFICE)) {
 			prep.setString(1, UUID.randomUUID().toString());

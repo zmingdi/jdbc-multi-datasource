@@ -10,9 +10,9 @@ spring:
       min-idle: 5
       default-auto-commit: true
     type: org.apache.tomcat.jdbc.pool.DataSource
-    username: "act_user"
-    url: jdbc:sqlserver://localhost:1433;databaseName=ACT_MASTER
-    jdbcUrl: jdbc:sqlserver://localhost:1433;databaseName=ACT_MASTER
+    username: "act_admin"
+    url: jdbc:sqlserver://localhost:1433;databaseName=testmaster
+    jdbcUrl: jdbc:sqlserver://localhost:1433;databaseName=testmaster
     password: "Password1"
     test-on-borrow: true
     validation-query: SELECT 1

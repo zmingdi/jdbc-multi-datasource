@@ -9,24 +9,35 @@ import com.example.datasource.DataSourceManager;
 import com.example.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author mzhang457
  */
+@Repository
 public class ClientRepository {
   @Autowired
   DataSourceManager dsMgt;
   
-  private static final String SQL_FIND_CLIENT_BY_ID = "select clientId, clientName from client where clientId=?";
-  public Client findById(Integer id) throws Exception {
-    JdbcTemplate template = dsMgt.getTemplate();
-    return template.queryForObject(SQL_FIND_CLIENT_BY_ID, new Object[]{id}, Client.class);
-  }
+  @Autowired
+  JdbcTemplate jdbcTemplate;
   
-  private static final String SQL_INSER_CLIENT = "insert into client (clientid, clientName) values (?,?)";
-  public Client insertClient(String clientId, String clientName) throws Exception{
-    JdbcTemplate template = dsMgt.getTemplate();
-    return null;
+  private static final String SQL_FIND_CLIENT_BY_ID 
+  	= "select clientName, clientDBName, clientDBHost, clientDBPort"
+  			+ ", clientDBUsername, clientDBPassword  from client where clientName=?";
+  public Client findByClientName(String clientName)  {
+    return jdbcTemplate.queryForObject(SQL_FIND_CLIENT_BY_ID, new Object[]{clientName}
+    	, (rs, rowNumber)->{
+    	Client client = new Client();
+    	client.setClientDBHost(rs.getString("clientDBHost"));
+    	client.setClientDBPort(rs.getString("clientDBPort"));
+    	client.setClientName(rs.getString("clientName"));
+    	client.setClientDBName(rs.getString("clientDBName"));
+    	client.setClientDBUserName(rs.getString("clientDBUsername"));
+    	client.setClientDBPassword(rs.getString("clientDBPassword"));
+    	return client;
+    });
   }
+
 }
